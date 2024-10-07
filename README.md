@@ -1,2 +1,44 @@
 # smallWebserverExamples
-Some small webservers to give the students an idea of what is possible in a weekend workshop at school.
+Einige kleine Beispiele für Webanwendugen, die im Rahmen eines Wochenend-Workshops von Schülern entwickelt werden könnten.
+
+## Beispiele
+
+### Quiz
+
+Im Ordner [/quiz](./quiz) befindet sich eine simple Quiz-Anwendung, die sich aus einem Frontend und einem Backend zusammensetzt.
+
+#### Mögliche Erweiterungsideen:
+
+
+- Schwierigkeit der Fragen basierend auf Anzahl der richtigen Antworten generieren
+- "Joker" hinzufügen
+- falsche Antworten zu Fragen zufällig generieren (per LLM (z. B. chatGPT))
+- Fragen in einer Datenbank speichern
+- Highscore als Cookie im Browser speichern
+
+
+## Werkzeuge
+
+### Backend
+
+#### FastAPI
+FastAPI => Python Package
+```bash
+pip install "fastapi[standard]"
+```
+
+Ausführen eines Dev-Servers:
+```bash
+fastapi dev main.py
+```
+
+weitere Details: siehe [FastAPI-Dokumentation](https://fastapi.tiangolo.com/)
+
+## weitere Ideen
+
+- Einkaufsliste
+- Geburtstagskalender
+- Newsfeed
+    - lokale News + Schulnews + ...
+    - -> Webscraping
+    

@@ -1,0 +1,42 @@
+[
+    {
+        "question": "In welchem Land ist die Lebenserwartung am höchsten?",
+        "difficulty": 5,
+        "correct": "Hongkong",
+        "wrong": [
+            "Deutschland",
+            "Marokko",
+            "Japan"
+        ]
+    },
+    {
+        "question": "Wie viele Elemente gibt es im Periodensystem?",
+        "difficulty": 3,
+        "correct": "118",
+        "wrong": [
+            "108",
+            "128",
+            "98"
+        ]
+    },
+    {
+        "question": "In welcher Stadt bist du, wenn du auf der Spanischen Treppe stehst?",
+        "difficulty": 4,
+        "correct": "Rom",
+        "wrong": [
+            "Madrid",
+            "Berlin",
+            "Rio de Janeiro"
+        ]
+    },
+    {
+        "question": "Wie viele Bit hat ein Byte?",
+        "difficulty": 1,
+        "correct": "8",
+        "wrong": [
+            "2",
+            "4",
+            "10"
+        ]
+    }
+]
