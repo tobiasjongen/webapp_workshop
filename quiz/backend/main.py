@@ -2,15 +2,32 @@ from fastapi import FastAPI, Response, status
 import json
 import random
 from datetime import datetime
+from fastapi.middleware.cors import CORSMiddleware
 
+app = FastAPI()
+
+'''CORS policy'''
+# Define the origins that should be allowed to make CORS requests
+origins = [
+    "http://localhost:3000",  # React frontend
+]
+
+# Add CORS middleware to FastAPI app
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# make sure to get different random numbers with each startup
 random.seed(datetime.now().timestamp())
 
-#load questions from .json file
+# load questions from .json file
 with open('questions.json', 'r') as file:
     questions = json.load(file)
 
-
-app = FastAPI()
 
 @app.get("/")
 async def root():
