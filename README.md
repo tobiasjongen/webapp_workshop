@@ -9,7 +9,6 @@ Im Ordner [/quiz](./quiz) befindet sich eine simple Quiz-Anwendung, die sich aus
 
 #### Mögliche Erweiterungsideen:
 
-
 - Schwierigkeit der Fragen basierend auf Anzahl der richtigen Antworten generieren
 - "Joker" hinzufügen
 - falsche Antworten zu Fragen zufällig generieren (per LLM (z. B. chatGPT))
@@ -18,6 +17,20 @@ Im Ordner [/quiz](./quiz) befindet sich eine simple Quiz-Anwendung, die sich aus
 
 
 ## Werkzeuge
+
+### Frontend
+
+#### React
+
+NodeJS notwendig => [Installationsanleitung](https://nodejs.org/en/download/package-manager)
+
+```bash
+npx create-react-app {app-name}
+cd {app-name}
+npm start
+```
+
+Tipp: ChatGPT
 
 ### Backend
 
