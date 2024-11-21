@@ -20,6 +20,8 @@ Im Ordner [/quiz](./quiz) befindet sich eine simple Quiz-Anwendung, die sich aus
 
 ### Frontend
 
+#### Python NiceGUI
+
 #### React
 
 NodeJS notwendig => [Installationsanleitung](https://nodejs.org/en/download/package-manager)
