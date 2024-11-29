@@ -18,6 +18,15 @@ Im Ordner [/quiz](./quiz) befindet sich eine simple Quiz-Anwendung, die sich aus
 
 ## Werkzeuge
 
+### venv
+
+```bash
+pip install virtualenv
+python -m venv env
+source myvenv/bin/activate #linux, mac; windows: 'venv\Scripts\activate.bat' oder 'venv\Scripts\Activate.ps1'
+pip install -r quiz/requirements.txt
+```
+
 ### Frontend
 
 #### Python NiceGUI
