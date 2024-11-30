@@ -14,24 +14,60 @@ Im Ordner [/quiz](./quiz) befindet sich eine simple Quiz-Anwendung, die sich aus
 - falsche Antworten zu Fragen zufällig generieren (per LLM (z. B. chatGPT))
 - Fragen in einer Datenbank speichern
 - Highscore als Cookie im Browser speichern
+- Nutzer-System bauen  
+    - Login 
+    - Highscore pro Nutzer
+    - Scoreboard
 
+### Newsfeed
+
+Im Ordner [/newsfeed](./newsfeed/) befindet sich eine einfache Newsfeed-Anwendung. Diese scraped aktuelle Nachrichten aus dem Web und stellt sie dar.
+
+- lokale News + Schulnews + ...
+
+#### Mögliche Erweiterungsideen:
+- caching: 
+    - nicht bei jeder Anfrage neues Scraping durchführen, sondern Ergbnisse zwischenspeichern, nach bestimmter Zeit ablaufen lassen
+    - Scraping in weiteren Dienst auslagern, der automatisch von Zeit zu Zeit vom Backend angefragt wird
+
+### weitere Ideen für Anwendungen
+
+- Einkaufsliste
+- Geburtstagskalender
+    
 
 ## Werkzeuge
 
 ### venv
+
+Um die für ein Projekt benötigten Python-Pakete zu installieren, kann eine virtuelle Umgebung (`venv`) verwendet werden. Dadurch werden die Pakete nicht lokal installiert. Dies kann insbesondere dann hilfreich sein, wenn für verschiedene Projekte das gleiche Paket in unterschiedlichen Versionen notwendig ist. 
 
 ```bash
 pip install virtualenv
 python -m venv env
 source myvenv/bin/activate #linux, mac; windows: 'venv\Scripts\activate.bat' oder 'venv\Scripts\Activate.ps1'
 pip install -r quiz/requirements.txt
+pip install -r newsfeed/requirements.txt
 ```
+
+Hinweis: Für jede neue Terminal-Session muss die Umgebung neu aktiviert werden (`source myvenv/bin/activate`).
 
 ### Frontend
 
+#### kein Framework/Library: HTML, CSS, JS
+
+TBA
+
 #### Python NiceGUI
 
+NiceGUI => Python Package
+
+weitere Detauls: siehe [Dokumentation](https://nicegui.io/documentation)
+
 #### React
+
+- kann sehr viel
+- für einfache Anwendung vermutlich zu komplex (wie solche, die im Rahmen einen Wochenend-Workshops entwickelt werden)
 
 NodeJS notwendig => [Installationsanleitung](https://nodejs.org/en/download/package-manager)
 
@@ -47,9 +83,6 @@ Tipp: ChatGPT
 
 #### FastAPI
 FastAPI => Python Package
-```bash
-pip install "fastapi[standard]"
-```
 
 Ausführen eines Dev-Servers:
 ```bash
@@ -58,11 +91,3 @@ fastapi dev main.py
 
 weitere Details: siehe [FastAPI-Dokumentation](https://fastapi.tiangolo.com/)
 
-## weitere Ideen
-
-- Einkaufsliste
-- Geburtstagskalender
-- Newsfeed
-    - lokale News + Schulnews + ...
-    - -> Webscraping
-    
