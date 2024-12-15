@@ -27,8 +27,9 @@ Im Ordner [/newsfeed](./newsfeed/) befindet sich eine einfache Newsfeed-Anwendun
 
 #### Mögliche Erweiterungsideen:
 - caching: 
-    - nicht bei jeder Anfrage neues Scraping durchführen, sondern Ergbnisse zwischenspeichern, nach bestimmter Zeit ablaufen lassen
-    - Scraping in weiteren Dienst auslagern, der automatisch von Zeit zu Zeit vom Backend angefragt wird
+    - nicht bei jeder Anfrage neues Crawling durchführen, sondern Ergbnisse zwischenspeichern, nach bestimmter Zeit ablaufen lassen
+    - Crawling in weiteren Dienst auslagern, der automatisch von Zeit zu Zeit vom Backend angefragt wird
+- Filtern nach Schlüsselworten
 
 ### weitere Ideen für Anwendungen
 
@@ -44,10 +45,10 @@ Um die für ein Projekt benötigten Python-Pakete zu installieren, kann eine vir
 
 ```bash
 pip install virtualenv
+cd {project}
 python -m venv env
 source myvenv/bin/activate #linux, mac; windows: 'venv\Scripts\activate.bat' oder 'venv\Scripts\Activate.ps1'
-pip install -r quiz/requirements.txt
-pip install -r newsfeed/requirements.txt
+pip install -r requirements.txt
 ```
 
 Hinweis: Für jede neue Terminal-Session muss die Umgebung neu aktiviert werden (`source myvenv/bin/activate`).
