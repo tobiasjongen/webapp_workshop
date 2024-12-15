@@ -27,6 +27,7 @@ schoolNews = []
 timestampSchool = datetime.datetime.now()
 localNews = []
 timestampLocal = datetime.datetime.now()
+cacheExpirationTime = 60*5
 
 @app.get("/")
 async def root():
@@ -35,7 +36,7 @@ async def root():
 @app.get("/local")
 async def getLocalNews():
     global localNews, timestampLocal
-    if (not localNews or (datetime.datetime.now() - timestampLocal).total_seconds() > 120):
+    if (not localNews or (datetime.datetime.now() - timestampLocal).total_seconds() > cacheExpirationTime):
         print("crawling latest data...")
 
         url = 'https://www.saechsische.de/lokales/meissen-lk/'
@@ -46,9 +47,11 @@ async def getLocalNews():
         
         for article in html_soup.find_all('article', attrs={"class": re.compile("^ContentTeaser")}):
             entry = {}
-            title = article.find('div', attrs={"class": re.compile("^Overline")}).get_text() 
+            title : str = article.find('div', attrs={"class": re.compile("^Overline")}).get_text() 
             title = title + " - " 
             title = title + article.find('h2', attrs={"class": re.compile("^Headline")}).get_text()
+            title = title.replace("Kostenpflichtig", "")
+            title = re.sub('[\s]+', ' ', title)
             entry["title"] = title.strip()
             entry["link"] = 'https://www.saechsische.de' + article.parent.get('href')
             teaser = article.find('p', attrs={"class":  re.compile("^TeaserText")})
@@ -60,7 +63,7 @@ async def getLocalNews():
 @app.get("/school")
 async def getSchoolNews():
     global schoolNews, timestampSchool
-    if (not schoolNews or (datetime.datetime.now() - timestampSchool).total_seconds() > 120):
+    if (not schoolNews or (datetime.datetime.now() - timestampSchool).total_seconds() > cacheExpirationTime):
         print("crawling latest data...")
 
         url = 'https://www.franziskaneum.de/wordpress/category/aktuelles/'

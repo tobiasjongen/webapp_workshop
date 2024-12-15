@@ -28,7 +28,8 @@ Im Ordner [/newsfeed](./newsfeed/) befindet sich eine einfache Newsfeed-Anwendun
 #### Mögliche Erweiterungsideen:
 - caching: 
     - nicht bei jeder Anfrage neues Crawling durchführen, sondern Ergbnisse zwischenspeichern, nach bestimmter Zeit ablaufen lassen
-    - Crawling in weiteren Dienst auslagern, der automatisch von Zeit zu Zeit vom Backend angefragt wird
+    - Crawling in weiteren Dienst auslagern, der automatisch von Zeit zu Zeit vom Backend angefragt wird, damit es zu keinen Zeitverzögerungen kommt
+    - schönere Teaser-Texte anzeigen -> Links folgen -> Achtung: nicht zu viel Last auf Server, sonst ggf. von Server auf Blacklist gesetzt
 - Filtern nach Schlüsselworten
 
 ### weitere Ideen für Anwendungen
@@ -46,7 +47,7 @@ Um die für ein Projekt benötigten Python-Pakete zu installieren, kann eine vir
 ```bash
 pip install virtualenv
 cd {project}
-python -m venv env
+python3 -m venv env
 source myvenv/bin/activate #linux, mac; windows: 'venv\Scripts\activate.bat' oder 'venv\Scripts\Activate.ps1'
 pip install -r requirements.txt
 ```
@@ -62,6 +63,11 @@ TBA
 #### Python NiceGUI
 
 NiceGUI => Python Package
+
+Ausführen:
+```bash
+python3 main.py
+```
 
 weitere Detauls: siehe [Dokumentation](https://nicegui.io/documentation)
 
