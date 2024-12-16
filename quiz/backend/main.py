@@ -3,6 +3,7 @@ import json
 import random
 from datetime import datetime
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 app = FastAPI()
 
@@ -25,7 +26,8 @@ app.add_middleware(
 random.seed(datetime.now().timestamp())
 
 # load questions from .json file
-with open('questions.json', 'r') as file:
+dir_path = os.path.dirname(os.path.realpath(__file__))
+with open(dir_path + '/questions.json', 'r') as file:
     questions = json.load(file)
 
 
