@@ -47,13 +47,18 @@ async def getLocalNews():
         
         for article in html_soup.find_all('article', attrs={"class": re.compile("^ContentTeaser")}):
             entry = {}
-            title : str = article.find('div', attrs={"class": re.compile("^Overline")}).get_text() 
-            title = title + " - " 
-            title = title + article.find('h2', attrs={"class": re.compile("^Headline")}).get_text()
+            overline = article.find('div', attrs={"class": re.compile("^Overline")})
+            headline = article.find('h2', attrs={"class": re.compile("^Headline")})
+            link = article.parent.get('href')
+
+            if overline == None or headline == None or link == None:
+                continue
+
+            title : str = overline.get_text() + " - " + headline.get_text()
             title = title.replace("Kostenpflichtig", "")
             title = re.sub('[\s]+', ' ', title)
             entry["title"] = title.strip()
-            entry["link"] = 'https://www.saechsische.de' + article.parent.get('href')
+            entry["link"] = 'https://www.saechsische.de' + link
             teaser = article.find('p', attrs={"class":  re.compile("^TeaserText")})
             entry["teaser"] = teaser.get_text().strip() if teaser is not None else ""
             localNews.append(entry)
@@ -71,15 +76,21 @@ async def getSchoolNews():
         timestampSchool = datetime.datetime.now()
         html_soup = BeautifulSoup(response.text, 'html.parser')
         schoolNews = []
+
         for article in html_soup.find_all('article', class_='post'):
             entry = {}
-            entry["title"] = article.find(class_='entry-title').get_text()
-            entry["link"] = article.find(class_='entry-title').find('a').get('href')
-            teaser : str = article.find(class_='post-content').find('div', class_='entry-content').get_text()
-            teaser = re.sub('([\t\n\\\/]+|(Weiterlesen))', ' ', teaser) #replace unwanted stuff with whitespaces
+            title =  article.find(class_='entry-title')
+            link = article.find(class_='entry-title').find('a')
+            teaser = article.find(class_='post-content').find('div', class_='entry-content')
+            
+            if title == None or link == None: # skip invalid occurences
+                continue
+
+            teaser = re.sub('([\t\n\\\/]+|(Weiterlesen))', ' ', teaser.get_text()) #replace unwanted stuff with whitespaces
             teaser = re.sub('[\s]+', ' ', teaser) #remove multiple whitespaces
-            teaser = teaser.strip() #remove leading and trailing whitespace
-            entry["teaser"] = teaser
+            entry["title"] = title.get_text().strip() # strip() removes leading and trailing whitespaces
+            entry["link"] = link.get('href')
+            entry["teaser"] = teaser.strip() if teaser is not None else ""
             schoolNews.append(entry)
 
     return schoolNews
