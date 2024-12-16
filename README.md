@@ -49,11 +49,11 @@ Um die für ein Projekt benötigten Python-Pakete zu installieren, kann eine vir
 pip install virtualenv
 cd {project}
 python3 -m venv env
-source myvenv/bin/activate #linux, mac; windows: 'venv\Scripts\activate.bat' oder 'venv\Scripts\Activate.ps1'
+source env/bin/activate #linux, mac; windows: 'venv\Scripts\activate.bat' oder 'venv\Scripts\Activate.ps1'
 pip install -r requirements.txt
 ```
 
-Hinweis: Für jede neue Terminal-Session muss die Umgebung neu aktiviert werden (`source myvenv/bin/activate`).
+Hinweis: Für jede neue Terminal-Session muss die Umgebung neu aktiviert werden (`source env/bin/activate`).
 
 ### Frontend
 
