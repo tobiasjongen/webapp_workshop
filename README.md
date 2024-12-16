@@ -21,16 +21,17 @@ Im Ordner [/quiz](./quiz) befindet sich eine simple Quiz-Anwendung, die sich aus
 
 ### Newsfeed
 
-Im Ordner [/newsfeed](./newsfeed/) befindet sich eine einfache Newsfeed-Anwendung. Diese scraped aktuelle Nachrichten aus dem Web und stellt sie dar.
+Im Ordner [/newsfeed](./newsfeed/) befindet sich eine einfache Newsfeed-Anwendung. Diese sammelt aktuelle Nachrichten aus dem Web und stellt sie dar.
 
 - lokale News + Schulnews + ...
 
 #### Mögliche Erweiterungsideen:
+
 - caching: 
-    - nicht bei jeder Anfrage neues Crawling durchführen, sondern Ergbnisse zwischenspeichern, nach bestimmter Zeit ablaufen lassen
-    - Crawling in weiteren Dienst auslagern, der automatisch von Zeit zu Zeit vom Backend angefragt wird, damit es zu keinen Zeitverzögerungen kommt
+    - nicht bei jeder Anfrage neues Scraping durchführen, sondern Ergbnisse zwischenspeichern, nach bestimmter Zeit ablaufen lassen
+    - Scraping in weiteren Dienst auslagern, der automatisch von Zeit zu Zeit vom Backend angefragt wird, damit es zu keinen Zeitverzögerungen kommt
     - schönere Teaser-Texte anzeigen -> Links folgen -> Achtung: nicht zu viel Last auf Server, sonst ggf. von Server auf Blacklist gesetzt
-- Filtern nach Schlüsselworten
+- Filtern nach Schlüsselworten in den Neuigkeiten
 
 ### weitere Ideen für Anwendungen
 
@@ -84,12 +85,12 @@ cd {app-name}
 npm start
 ```
 
-Tipp: ChatGPT
+Tipp: ChatGPT ist im Generieren von einfach React-Frontends recht gut. 
 
 ### Backend
 
 #### FastAPI
-FastAPI => Python Package
+FastAPI ist eine Python-Bibliothek, die für die komfortable Erstellung eines Backends beziehungsweise einer API bentuzt werden kann.
 
 Ausführen eines Dev-Servers:
 ```bash
@@ -98,3 +99,7 @@ fastapi dev main.py
 
 weitere Details: siehe [FastAPI-Dokumentation](https://fastapi.tiangolo.com/)
 
+#### Beautiful Soup
+Beautiful Soup ist eine Python-Bibliothek, die das Web-Scraping vereinfacht. Sie bietet die Möglichkeit, komfortabel Informationen aus HTML-Dokumenten zu parsen. 
+
+[Dokumenation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
