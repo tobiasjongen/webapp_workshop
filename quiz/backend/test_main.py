@@ -36,7 +36,7 @@ def test_random_questions():
     assert not equal
 
     equal = True
-    for i in range(0,10): # hopefully unlikely enough
+    for i in range(0,100): # hopefully unlikely enough
         resp1 = client.get("/random_question/1")
         resp2 = client.get("/random_question/1")
         equal = resp1.json()["question"] == resp2.json()["question"]
