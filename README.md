@@ -55,6 +55,10 @@ pip install -r requirements.txt
 
 Hinweis: Für jede neue Terminal-Session muss die Umgebung neu aktiviert werden (`source env/bin/activate`).
 
+### pytest
+
+... TODO ...
+
 ### Frontend
 
 #### kein Framework/Library: HTML, CSS, JS

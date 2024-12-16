@@ -1,5 +1,6 @@
 {
     "python.testing.pytestArgs": [
+        "newsfeed",
         "quiz"
     ],
     "python.testing.unittestEnabled": false,
