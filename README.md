@@ -72,20 +72,6 @@ python3 main.py
 
 weitere Detauls: siehe [Dokumentation](https://nicegui.io/documentation)
 
-#### React
-
-- kann sehr viel
-- für einfache Anwendung vermutlich zu komplex (wie solche, die im Rahmen einen Wochenend-Workshops entwickelt werden)
-
-NodeJS notwendig => [Installationsanleitung](https://nodejs.org/en/download/package-manager)
-
-```bash
-npx create-react-app {app-name}
-cd {app-name}
-npm start
-```
-
-Tipp: ChatGPT ist im Generieren von einfach React-Frontends recht gut. 
 
 ### Backend
 
