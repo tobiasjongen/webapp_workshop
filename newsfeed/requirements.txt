@@ -1,1 +1,5 @@
 fastapi[standard]
+html5lib
+requests
+bs4
+nicegui

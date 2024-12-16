@@ -21,14 +21,17 @@ Im Ordner [/quiz](./quiz) befindet sich eine simple Quiz-Anwendung, die sich aus
 
 ### Newsfeed
 
-Im Ordner [/newsfeed](./newsfeed/) befindet sich eine einfache Newsfeed-Anwendung. Diese scraped aktuelle Nachrichten aus dem Web und stellt sie dar.
+Im Ordner [/newsfeed](./newsfeed/) befindet sich eine einfache Newsfeed-Anwendung. Diese sammelt aktuelle Nachrichten aus dem Web und stellt sie dar.
 
 - lokale News + Schulnews + ...
 
 #### Mögliche Erweiterungsideen:
+
 - caching: 
     - nicht bei jeder Anfrage neues Scraping durchführen, sondern Ergbnisse zwischenspeichern, nach bestimmter Zeit ablaufen lassen
-    - Scraping in weiteren Dienst auslagern, der automatisch von Zeit zu Zeit vom Backend angefragt wird
+    - Scraping in weiteren Dienst auslagern, der automatisch von Zeit zu Zeit vom Backend angefragt wird, damit es zu keinen Zeitverzögerungen kommt
+    - schönere Teaser-Texte anzeigen -> Links folgen -> Achtung: nicht zu viel Last auf Server, sonst ggf. von Server auf Blacklist gesetzt
+- Filtern nach Schlüsselworten in den Neuigkeiten
 
 ### weitere Ideen für Anwendungen
 
@@ -44,10 +47,10 @@ Um die für ein Projekt benötigten Python-Pakete zu installieren, kann eine vir
 
 ```bash
 pip install virtualenv
-python -m venv env
+cd {project}
+python3 -m venv env
 source myvenv/bin/activate #linux, mac; windows: 'venv\Scripts\activate.bat' oder 'venv\Scripts\Activate.ps1'
-pip install -r quiz/requirements.txt
-pip install -r newsfeed/requirements.txt
+pip install -r requirements.txt
 ```
 
 Hinweis: Für jede neue Terminal-Session muss die Umgebung neu aktiviert werden (`source myvenv/bin/activate`).
@@ -61,6 +64,11 @@ TBA
 #### Python NiceGUI
 
 NiceGUI => Python Package
+
+Ausführen:
+```bash
+python3 main.py
+```
 
 weitere Detauls: siehe [Dokumentation](https://nicegui.io/documentation)
 
@@ -77,12 +85,12 @@ cd {app-name}
 npm start
 ```
 
-Tipp: ChatGPT
+Tipp: ChatGPT ist im Generieren von einfach React-Frontends recht gut. 
 
 ### Backend
 
 #### FastAPI
-FastAPI => Python Package
+FastAPI ist eine Python-Bibliothek, die für die komfortable Erstellung eines Backends beziehungsweise einer API bentuzt werden kann.
 
 Ausführen eines Dev-Servers:
 ```bash
@@ -91,3 +99,7 @@ fastapi dev main.py
 
 weitere Details: siehe [FastAPI-Dokumentation](https://fastapi.tiangolo.com/)
 
+#### Beautiful Soup
+Beautiful Soup ist eine Python-Bibliothek, die das Web-Scraping vereinfacht. Sie bietet die Möglichkeit, komfortabel Informationen aus HTML-Dokumenten zu parsen. 
+
+[Dokumenation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
