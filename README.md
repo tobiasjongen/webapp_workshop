@@ -7,6 +7,8 @@ Einige kleine Beispiele für Webanwendugen, die im Rahmen eines Wochenend-Worksh
 
 Im Ordner [/quiz](./quiz) befindet sich eine simple Quiz-Anwendung, die sich aus einem Frontend und einem Backend zusammensetzt.
 
+![image](./img/quiz_frontend_python.png)
+
 #### Mögliche Erweiterungsideen:
 
 - Schwierigkeit der Fragen basierend auf Anzahl der richtigen Antworten generieren
@@ -25,6 +27,8 @@ Im Ordner [/newsfeed](./newsfeed/) befindet sich eine einfache Newsfeed-Anwendun
 
 - lokale News + Schulnews + ...
 
+![image](./img/newsfeed_frontend_python.png)
+
 #### Mögliche Erweiterungsideen:
 
 - caching: 
@@ -41,7 +45,7 @@ Im Ordner [/newsfeed](./newsfeed/) befindet sich eine einfache Newsfeed-Anwendun
 
 ## Werkzeuge
 
-### venv
+### venv (optional)
 
 Um die für ein Projekt benötigten Python-Pakete zu installieren, kann eine virtuelle Umgebung (`venv`) verwendet werden. Dadurch werden die Pakete nicht lokal installiert. Dies kann insbesondere dann hilfreich sein, wenn für verschiedene Projekte das gleiche Paket in unterschiedlichen Versionen notwendig ist. 
 
