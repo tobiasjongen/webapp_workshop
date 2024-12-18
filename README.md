@@ -1,4 +1,4 @@
-# smallWebappExamples
+# Webapp Workshop
 Einige kleine Beispiele für Webanwendugen, die im Rahmen eines Wochenend-Workshops von Schülern entwickelt werden könnten.
 
 ## Beispiele
