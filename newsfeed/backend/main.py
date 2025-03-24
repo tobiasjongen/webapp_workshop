@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from requests import get
@@ -98,3 +99,6 @@ async def getSchoolNews():
 @app.get("/global")
 async def getGlobalNews():
     return "TODO: implement"
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

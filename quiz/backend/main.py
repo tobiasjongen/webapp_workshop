@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI, Response, status
 import json
 import random
@@ -53,3 +54,7 @@ async def questionByDifficulty(difficulty, resp: Response):
     
     randInt = random.randint(0, len(possibleQuestions)-1)
     return possibleQuestions[randInt]
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
