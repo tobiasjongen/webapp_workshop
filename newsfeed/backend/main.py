@@ -38,7 +38,7 @@ async def root():
 async def getLocalNews():
     global localNews, timestampLocal
     if (not localNews or (datetime.datetime.now() - timestampLocal).total_seconds() > cacheExpirationTime):
-        print("crawling latest data...")
+        print("crawling latest local news...")
 
         url = 'https://www.saechsische.de/lokales/meissen-lk/'
         response = get(url)
@@ -50,7 +50,7 @@ async def getLocalNews():
             entry = {}
             overline = article.find('div', attrs={"class": re.compile("^Overline")})
             headline = article.find('h2', attrs={"class": re.compile("^Headline")})
-            link = article.parent.get('href')
+            link = article.parent.parent.get('href')
 
             if overline == None or headline == None or link == None:
                 continue
@@ -70,7 +70,7 @@ async def getLocalNews():
 async def getSchoolNews():
     global schoolNews, timestampSchool
     if (not schoolNews or (datetime.datetime.now() - timestampSchool).total_seconds() > cacheExpirationTime):
-        print("crawling latest data...")
+        print("crawling latest school news...")
 
         url = 'https://www.franziskaneum.de/wordpress/category/aktuelles/'
         response = get(url)
