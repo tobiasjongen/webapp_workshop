@@ -28,19 +28,21 @@ def test_valid_json_structure():
         assert set(json.keys()) == expected_keys
 
 def test_random_questions():
-    equal = True
-    for i in range(0,10): # hopefully unlikely enough
+    equalAnswers = 0
+    for i in range(0,10):
         resp1 = client.get("/random_question")
         resp2 = client.get("/random_question")
-        equal = resp1.json()["question"] == resp2.json()["question"]
-    assert not equal
+        if resp1.json()["question"] == resp2.json()["question"]:
+            equalAnswers += 1
+    assert equalAnswers < 4 # hopefully unlikely enough
 
-    equal = True
-    for i in range(0,100): # hopefully unlikely enough
+    equalAnswers = 0
+    for i in range(0,100): 
         resp1 = client.get("/random_question/1")
         resp2 = client.get("/random_question/1")
-        equal = resp1.json()["question"] == resp2.json()["question"]
-    assert not equal
+        if resp1.json()["question"] == resp2.json()["question"]:
+            equalAnswers += 1
+    assert equalAnswers < 60 # hopefully unlikely enough
 
 def test_diffiuclty():
     # assume we have question with difficulty 1 and 3
