@@ -23,9 +23,7 @@ Im Ordner [/quiz](./quiz) befindet sich eine simple Quiz-Anwendung, die sich aus
 
 ### Newsfeed
 
-Im Ordner [/newsfeed](./newsfeed/) befindet sich eine einfache Newsfeed-Anwendung. Diese sammelt aktuelle Nachrichten aus dem Web und stellt sie dar.
-
-- lokale News + Schulnews + ...
+Im Ordner [/newsfeed](./newsfeed/) befindet sich eine einfache Newsfeed-Anwendung. Diese sammelt aktuelle Nachrichten aus dem Web und stellt sie dar. Aktuell werden lokale Nachrichten dargestellt sowie Neuigkeiten aus der Schule.
 
 ![image](./img/newsfeed_frontend_python.png)
 
@@ -41,7 +39,7 @@ Im Ordner [/newsfeed](./newsfeed/) befindet sich eine einfache Newsfeed-Anwendun
 
 - Einkaufsliste
 - Geburtstagskalender
-    
+- ...
 
 ## Werkzeuge
 
@@ -58,10 +56,6 @@ pip install -r requirements.txt
 ```
 
 Hinweis: Für jede neue Terminal-Session muss die Umgebung neu aktiviert werden (`source env/bin/activate`).
-
-### pytest
-
-... TODO ...
 
 ### Frontend
 
@@ -97,3 +91,11 @@ weitere Details: siehe [FastAPI-Dokumentation](https://fastapi.tiangolo.com/)
 Beautiful Soup ist eine Python-Bibliothek, die das Web-Scraping vereinfacht. Sie bietet die Möglichkeit, komfortabel Informationen aus HTML-Dokumenten zu parsen. 
 
 [Dokumenation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+
+### Testen - pytest
+
+Mittels Testen wird sichergestellt, dass die Software einer definierter Funktionalität entspricht. Für die Backends der Newsfeed-App und der Quiz-App sind bereits Tests geschrieben, die die grundlegende Funktionalität der Anwendungen abdecken. Die Tests für die Newsfeed-App befinden sich in [/newsfeed/backend/test_main.py](/newsfeed/backend/test_main.py) und für die Quiz-App befinden sich die Tests in [/quiz/backend/test_main.py](/quiz/backend/test_main.py).
+
+FastAPI stellt bereits eine Möglichkeit zur Verfügung, wie APIs, die mit FastAPI geschrieben sind, komfortabel getestet werden können. [FastAPI Dokumentation zum Testing](https://fastapi.tiangolo.com/tutorial/testing/)
+
+Ausgeführt werden können die Tests, indem im jeweiligen Ordner der Anwendung `pytest` in der Kommandozeile ausgeführt wird. pytest findet die Tests dann automatisch und führt sie aus.
