@@ -11,7 +11,7 @@ app = FastAPI()
 '''CORS policy'''
 # Define the origins that should be allowed to make CORS requests
 origins = [
-    "http://localhost:3000",  # React frontend
+    "http://localhost:8080",
 ]
 
 # Add CORS middleware to FastAPI app
