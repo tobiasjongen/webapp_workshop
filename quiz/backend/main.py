@@ -1,16 +1,17 @@
+import uvicorn
 from fastapi import FastAPI, Response, status
 import json
 import random
 from datetime import datetime
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 app = FastAPI()
 
 '''CORS policy'''
 # Define the origins that should be allowed to make CORS requests
 origins = [
-    "http://localhost:3000",  # React frontend
-    "http://localhost:8080",  # plain frontend
+    "http://localhost:8080",
 ]
 
 # Add CORS middleware to FastAPI app
@@ -26,7 +27,8 @@ app.add_middleware(
 random.seed(datetime.now().timestamp())
 
 # load questions from .json file
-with open('questions.json', 'r') as file:
+dir_path = os.path.dirname(os.path.realpath(__file__))
+with open(dir_path + '/questions.json', 'r') as file:
     questions = json.load(file)
 
 
@@ -52,3 +54,7 @@ async def questionByDifficulty(difficulty, resp: Response):
     
     randInt = random.randint(0, len(possibleQuestions)-1)
     return possibleQuestions[randInt]
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)
