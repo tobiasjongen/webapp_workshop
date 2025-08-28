@@ -26,9 +26,45 @@ body {
 h1 {
     color: #4a5568;
     font-size: 2.5em;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     font-weight: 300;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#score-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: rgba(79, 172, 254, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(79, 172, 254, 0.2);
+}
+
+.score-item {
+    text-align: center;
+}
+
+.score-label {
+    display: block;
+    font-size: 0.9em;
+    color: #4a5568;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+#current-score, #highscore {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #2d3748;
+}
+
+#current-score {
+    color: #3182ce;
+}
+
+#highscore {
+    color: #38a169;
 }
 
 #question {
@@ -131,6 +167,16 @@ button[onclick="displayNewQuestion()"]:active {
     
     h1 {
         font-size: 2em;
+    }
+    
+    #score-container {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    #current-score, #highscore {
+        font-size: 1.5em;
     }
     
     #question {

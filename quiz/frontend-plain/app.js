@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', function() {
   displayNewQuestion();
 }, false);
 
+var score = 0;
+var highscore = 0;
+
 function shuffleArray(array) {
   for (var i = array.length - 1; i >= 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
@@ -59,8 +62,13 @@ function checkAnswer(selectedAnswer, correctAnswer, answerContainer) {
       // Add class to the clicked button
       if (selectedAnswer === correctAnswer) {
         button.classList.add('correct');
+        score += 1;
+        if (score > highscore) {
+          highscore = score;
+        }
       } else {
         button.classList.add('incorrect');
+        score = 0; // Reset score on wrong answer
       }
     } else if (buttonText === correctAnswer && selectedAnswer !== correctAnswer) {
       // Add class to show correct answer border if user was wrong
@@ -70,4 +78,12 @@ function checkAnswer(selectedAnswer, correctAnswer, answerContainer) {
     // Disable all buttons after answer is selected
     button.disabled = true;
   });
+  
+  // Update score display
+  updateScoreDisplay();
+}
+
+function updateScoreDisplay() {
+  document.getElementById('current-score').textContent = score;
+  document.getElementById('highscore').textContent = highscore;
 }
