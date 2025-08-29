@@ -34,7 +34,7 @@ with open(dir_path + '/questions.json', 'r') as file:
     questions = json.load(file)
 
 highscores = dict()
-highestUsrId = -1
+highestGameId = -1
 
 class Highscore(BaseModel):
     score: int
@@ -63,13 +63,6 @@ async def questionByDifficulty(difficulty):
     randInt = random.randint(0, len(possibleQuestions)-1)
     return possibleQuestions[randInt]
 
-@app.get("/highscore/{usr_id}")
-async def getUsrHighscore(usr_id: int):
-    global highestUsrId, highscores
-    if usr_id > highestUsrId or usr_id < 0:
-        raise HTTPException(status_code=404, detail="User not found")
-    return {"user_id": usr_id, "score": highscores[usr_id]}
-
 @app.get("/highscore")
 async def getAllHighscores():
     global highscores
@@ -77,19 +70,19 @@ async def getAllHighscores():
 
 @app.post("/highscore")
 async def storeUsrHigscore(score: Highscore):
-    global highestUsrId, highscores
-    highestUsrId = highestUsrId + 1
-    usr_id = highestUsrId    
-    highscores[usr_id] = score.score
-    return {"user_id": usr_id, "score": score.score}
+    global highestGameId, highscores
+    highestGameId = highestGameId + 1
+    game_id = highestGameId    
+    highscores[game_id] = score.score
+    return {"game_id": game_id, "score": score.score}
 
-@app.put("/highscore/{usr_id}")
-async def updateUsrHighscore(usr_id: int, score: Highscore):
-    global highestUsrId, highscores
-    if usr_id > highestUsrId or usr_id < 0:
-        raise HTTPException(status_code=404, detail="User not found")
-    highscores[usr_id] = score.score
-    return {"user_id": usr_id, "score": score.score}
+@app.put("/highscore/{game_id}")
+async def updateUsrHighscore(game_id: int, score: Highscore):
+    global highestGameId, highscores
+    if game_id > highestGameId or game_id < 0:
+        raise HTTPException(status_code=404, detail="Game not found")
+    highscores[game_id] = score.score
+    return {"game_id": game_id, "score": score.score}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

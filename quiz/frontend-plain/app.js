@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
   displayNewQuestion();
 }, false);
 
@@ -19,12 +19,37 @@ async function getRandomQuestion() {
   return await resp.json()
 }
 
+async function postHighscore(score) {
+  const resp = await fetch("http://localhost:8000/highscore", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({score: score})
+  });
+
+  const returnedJson = await resp.json();
+
+  return returnedJson["game_id"];
+}
+
+async function putHighscore(game_id, score) {
+  const resp = await fetch(`http://localhost:8000/highscore/${game_id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({score: score})
+  });
+  return await resp.json();
+}
+
 async function displayNewQuestion() {
   var question = await getRandomQuestion();
   console.log(question);
 
   var questionNode = document.getElementById("question")
-  questionNode.innerHTML = ''; //clear old question
+  questionNode.innerHTML = '';
   const questionText = document.createTextNode(question["question"]);
   questionNode.appendChild(questionText);
 
@@ -33,7 +58,6 @@ async function displayNewQuestion() {
   answers.push(question["correct"]);
   shuffleArray(answers);
   
-  // Store the correct answer for comparison
   const correctAnswer = question["correct"];
   
   answers.forEach(answer => {
@@ -41,7 +65,6 @@ async function displayNewQuestion() {
     answerSpan.classList.add("answer");
     answerSpan.appendChild(document.createTextNode(answer));
     
-    // Add click event listener to check answer
     answerSpan.addEventListener('click', function() {
       checkAnswer(answer, correctAnswer, answerNode);
     });
@@ -52,38 +75,41 @@ async function displayNewQuestion() {
 }
 
 function checkAnswer(selectedAnswer, correctAnswer, answerContainer) {
-  // Get all answer buttons in this container
   const answerButtons = answerContainer.querySelectorAll('.answer');
   
   answerButtons.forEach(button => {
     const buttonText = button.textContent;
     
     if (buttonText === selectedAnswer) {
-      // Add class to the clicked button
       if (selectedAnswer === correctAnswer) {
         button.classList.add('correct');
         score += 1;
-        if (score > highscore) {
-          highscore = score;
-        }
       } else {
         button.classList.add('incorrect');
-        score = 0; // Reset score on wrong answer
+        score = 0;
       }
     } else if (buttonText === correctAnswer && selectedAnswer !== correctAnswer) {
-      // Add class to show correct answer border if user was wrong
       button.classList.add('show-correct');
     }
     
-    // Disable all buttons after answer is selected
     button.disabled = true;
   });
   
-  // Update score display
   updateScoreDisplay();
 }
 
-function updateScoreDisplay() {
+async function updateScoreDisplay() {
   document.getElementById('current-score').textContent = score;
-  document.getElementById('highscore').textContent = highscore;
+
+  if (score > highscore) {
+    highscore = score;
+    document.getElementById('highscore').textContent = highscore;
+
+    if ("gameId" in sessionStorage) {
+      await putHighscore(sessionStorage.getItem("gameId"), highscore);
+    } else {
+      const gameId = await postHighscore(highscore);
+      sessionStorage.setItem("gameId", gameId);
+    }
+  }
 }
