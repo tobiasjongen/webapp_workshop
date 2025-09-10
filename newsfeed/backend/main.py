@@ -49,7 +49,11 @@ async def getLocalNews():
             entry = {}
             entry['link'] = article['url']
             entry['title'] = article['title']
-            shortenedTeaser = article['content-plain'][:300] + "..."
+            content_plain = article['content-plain']
+            if len(content_plain) > 300:
+                shortenedTeaser = content_plain[:300] + "..."
+            else:
+                shortenedTeaser = content_plain
             entry['teaser'] = re.sub(r"\s+", " ", shortenedTeaser)
             
             localNews.append(entry)
