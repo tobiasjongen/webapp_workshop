@@ -5,7 +5,6 @@ from requests import get
 from bs4 import BeautifulSoup
 import re
 import datetime
-
 app = FastAPI()
 
 '''CORS policy'''
@@ -23,12 +22,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-##cached results and timestamps
+# cached results and timestamps
 schoolNews = []
 timestampSchool = datetime.datetime.now()
 localNews = []
 timestampLocal = datetime.datetime.now()
-cacheExpirationTime = 60*5
+CACHE_EXPIRATION_TIME = 60*5
 
 @app.get("/")
 async def root():
@@ -37,31 +36,22 @@ async def root():
 @app.get("/local")
 async def getLocalNews():
     global localNews, timestampLocal
-    if (not localNews or (datetime.datetime.now() - timestampLocal).total_seconds() > cacheExpirationTime):
-        print("crawling latest local news...")
+    if (not localNews or (datetime.datetime.now() - timestampLocal).total_seconds() > CACHE_EXPIRATION_TIME):
+        print("fetching latest local news...")
 
-        url = 'https://www.saechsische.de/lokales/meissen-lk/'
-        response = get(url)
-        timestampLocal = datetime.datetime.now()
-        html_soup = BeautifulSoup(response.text, 'html.parser')
         localNews = []
-        
-        for article in html_soup.find_all('article', attrs={"class": re.compile("^ContentTeaser")}):
+        timestampLocal = datetime.datetime.now()
+        url = 'https://www.medienservice.sachsen.de/medien/rmi/press_releases.json?count=15'
+        response = get(url)
+        contentJson = response.json()
+
+        for article in contentJson['press_releases']:
             entry = {}
-            overline = article.find('div', attrs={"class": re.compile("^Overline")})
-            headline = article.find('h2', attrs={"class": re.compile("^Headline")})
-            link = article.parent.parent.get('href')
-
-            if overline == None or headline == None or link == None:
-                continue
-
-            title : str = overline.get_text() + " - " + headline.get_text()
-            title = title.replace("Kostenpflichtig", "")
-            title = re.sub('[\s]+', ' ', title)
-            entry["title"] = title.strip()
-            entry["link"] = 'https://www.saechsische.de' + link
-            teaser = article.find('p', attrs={"class":  re.compile("^TeaserText")})
-            entry["teaser"] = teaser.get_text().strip() if teaser is not None else ""
+            entry['link'] = article['url']
+            entry['title'] = article['title']
+            shortenedTeaser = article['content-plain'][:300] + "..."
+            entry['teaser'] = re.sub(r"\s+", " ", shortenedTeaser)
+            
             localNews.append(entry)
 
     return localNews
@@ -69,10 +59,10 @@ async def getLocalNews():
 @app.get("/school")
 async def getSchoolNews():
     global schoolNews, timestampSchool
-    if (not schoolNews or (datetime.datetime.now() - timestampSchool).total_seconds() > cacheExpirationTime):
+    if (not schoolNews or (datetime.datetime.now() - timestampSchool).total_seconds() > CACHE_EXPIRATION_TIME):
         print("crawling latest school news...")
 
-        url = 'https://www.franziskaneum.de/wordpress/category/aktuelles/'
+        url = 'https://www.franziskaneum.de/wp/category/aktuelles/'
         response = get(url)
         timestampSchool = datetime.datetime.now()
         html_soup = BeautifulSoup(response.text, 'html.parser')
@@ -82,7 +72,7 @@ async def getSchoolNews():
             entry = {}
             title =  article.find(class_='entry-title')
             link = article.find(class_='entry-title').find('a')
-            teaser = article.find(class_='post-content').find('div', class_='entry-content')
+            teaser = article.find(class_='entry-summary').find('p')
             
             if title == None or link == None: # skip invalid occurences
                 continue
@@ -95,10 +85,6 @@ async def getSchoolNews():
             schoolNews.append(entry)
 
     return schoolNews
-
-@app.get("/global")
-async def getGlobalNews():
-    return "TODO: implement"
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
