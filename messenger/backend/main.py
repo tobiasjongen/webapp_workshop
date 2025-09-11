@@ -9,13 +9,12 @@ app = FastAPI(title="Simple Messenger API")
 # Add CORS middleware to allow frontend to communicate with backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify your frontend URL
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# In-memory storage for messages (in production, use a database)
 messages = []
 
 # Pydantic models for request/response

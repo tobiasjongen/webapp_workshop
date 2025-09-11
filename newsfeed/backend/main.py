@@ -5,18 +5,12 @@ from requests import get
 from bs4 import BeautifulSoup
 import re
 import datetime
+
 app = FastAPI()
 
-'''CORS policy'''
-# Define the origins that should be allowed to make CORS requests
-origins = [
-    "http://localhost:8080"
-]
-
-# Add CORS middleware to FastAPI app
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
