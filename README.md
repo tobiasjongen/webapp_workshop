@@ -7,7 +7,7 @@ Einige kleine Beispiele für Webanwendugen, die im Rahmen eines Wochenend-Worksh
 
 Im Ordner [/quiz](./quiz) befindet sich eine simple Quiz-Anwendung, die sich aus einem Frontend und einem Backend zusammensetzt.
 
-![image](./img/quiz_frontend_python.png)
+![image](./img/quiz_frontend_plain.png)
 
 #### Mögliche Erweiterungsideen:
 
@@ -25,20 +25,21 @@ Im Ordner [/quiz](./quiz) befindet sich eine simple Quiz-Anwendung, die sich aus
 
 Im Ordner [/newsfeed](./newsfeed/) befindet sich eine einfache Newsfeed-Anwendung. Diese sammelt aktuelle Nachrichten aus dem Web und stellt sie dar. Aktuell werden lokale Nachrichten dargestellt sowie Neuigkeiten aus der Schule.
 
-![image](./img/newsfeed_frontend_python.png)
+![image](./img/newsfeed_frontend_plain.png)
 
 #### Mögliche Erweiterungsideen:
 
 - caching: 
     - nicht bei jeder Anfrage neues Scraping durchführen, sondern Ergbnisse zwischenspeichern, nach bestimmter Zeit ablaufen lassen
     - Scraping in weiteren Dienst auslagern, der automatisch von Zeit zu Zeit vom Backend angefragt wird, damit es zu keinen Zeitverzögerungen kommt
-    - schönere Teaser-Texte anzeigen -> Links folgen -> Achtung: nicht zu viel Last auf Server, sonst ggf. von Server auf Blacklist gesetzt
+    - schönere Teaser-Texte anzeigen -> Links folgen -> Achtung: nicht zu viele Anfragen an den Server senden
 - Filtern nach Schlüsselworten in den Neuigkeiten
 
 ### weitere Ideen für Anwendungen
 
 - Einkaufsliste
 - Geburtstagskalender
+- simpler Messenger
 - ...
 
 ## Werkzeuge
