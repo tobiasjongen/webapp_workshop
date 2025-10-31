@@ -1,7 +1,9 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
+import asyncio
+import json
 from datetime import datetime
 
 app = FastAPI(title="Simple Messenger API")
@@ -17,63 +19,75 @@ app.add_middleware(
 
 messages = []
 
-# Pydantic models for request/response
-class MessageCreate(BaseModel):
-    username: str
-    content: str
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: list[WebSocket] = []
 
-class Message(BaseModel):
-    id: int
-    username: str
-    content: str
-    timestamp: str
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
 
-class LoginRequest(BaseModel):
-    username: str
+    def disconnect(self, websocket: WebSocket):
+        try:
+            self.active_connections.remove(websocket)
+        except ValueError:
+            pass
 
-@app.get("/")
-def read_root():
-    return {"message": "Simple Messenger API"}
+    async def broadcast(self, message: str):
+        to_remove = []
+        for connection in list(self.active_connections):
+            try:
+                await connection.send_text(message)
+            except Exception:
+                to_remove.append(connection)
+        for c in to_remove:
+            self.disconnect(c)
 
-@app.post("/login")
-def login(request: LoginRequest):
-    """Simple login endpoint - just validates username exists"""
-    if not request.username or request.username.strip() == "":
-        raise HTTPException(status_code=400, detail="Username cannot be empty")
-    
-    return {"message": f"Welcome {request.username}!", "username": request.username}
 
-@app.get("/messages", response_model=List[Message])
-def get_messages():
-    """Get all messages in chronological order"""
-    return messages
+manager = ConnectionManager()
 
-@app.post("/messages", response_model=Message)
-def send_message(message: MessageCreate):
-    """Send a new message"""
-    if not message.username or message.username.strip() == "":
-        raise HTTPException(status_code=400, detail="Username cannot be empty")
-    
-    if not message.content or message.content.strip() == "":
-        raise HTTPException(status_code=400, detail="Message content cannot be empty")
-    
-    # Create new message
-    new_message = {
-        "id": len(messages) + 1,
-        "username": message.username.strip(),
-        "content": message.content.strip(),
-        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    }
-    
-    messages.append(new_message)
-    return new_message
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    """Simple WebSocket endpoint. Clients should send JSON messages.
 
-@app.delete("/messages")
-def clear_messages():
-    """Clear all messages (for testing purposes)"""
-    global messages
-    messages = []
-    return {"message": "All messages cleared"}
+    Supported client->server message shapes (JSON):
+      {"type":"send_message","username":"alice","content":"hello"}
+
+    Server->client messages (JSON):
+      {"type":"new_message","message": { id, username, content, timestamp }}
+    """
+    await manager.connect(websocket)
+    try:
+        # Send initial sync of existing messages
+        await websocket.send_text(json.dumps({"type": "init_sync", "messages": messages}))
+
+        while True:
+            data = await websocket.receive_text()
+            try:
+                payload = json.loads(data)
+            except Exception:
+                continue
+
+            if payload.get("type") == "send_message":
+                username = payload.get("username")
+                content = payload.get("content")
+                if not username or not content:
+                    continue
+
+                new_message = {
+                    "id": len(messages) + 1,
+                    "username": username.strip(),
+                    "content": content.strip(),
+                    "timestamp": __import__('datetime').datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                }
+                messages.append(new_message)
+                # Broadcast to all connected clients
+                await manager.broadcast(json.dumps({"type": "new_message", "message": new_message}))
+            else:
+                continue
+
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
 
 if __name__ == "__main__":
     import uvicorn

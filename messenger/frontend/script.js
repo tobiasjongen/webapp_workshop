@@ -1,6 +1,7 @@
-const API_BASE_URL = 'http://localhost:8000';
+const WS_URL = 'ws://localhost:8000/ws';
 let currentUsername = '';
 let messageInterval;
+let ws = null;
 
 // Handle Enter key in login input
 document.getElementById('usernameInput').addEventListener('keypress', function(e) {
@@ -32,36 +33,16 @@ async function login() {
         return;
     }
 
-    try {
-        const response = await fetch(`${API_BASE_URL}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username: username })
-        });
+    currentUsername = username;
+    document.getElementById('currentUsername').textContent = username;
 
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.detail || 'Login failed');
-        }
+    // Switch to chat view
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('chatSection').style.display = 'block';
+    document.getElementById('userInfo').style.display = 'block';
 
-        currentUsername = username;
-        document.getElementById('currentUsername').textContent = username;
-        
-        // Switch to chat view
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('chatSection').style.display = 'block';
-        document.getElementById('userInfo').style.display = 'block';
-        
-        // Load messages and start polling
-        await loadMessages();
-        startMessagePolling();
-        
-        errorDiv.textContent = '';
-    } catch (error) {
-        errorDiv.textContent = error.message;
-    }
+    connectWebSocket();
+    errorDiv.textContent = '';
 }
 
 async function sendMessage() {
@@ -71,45 +52,76 @@ async function sendMessage() {
     if (!content) return;
 
     try {
-        const response = await fetch(`${API_BASE_URL}/messages`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: currentUsername,
-                content: content
-            })
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.detail || 'Failed to send message');
+        // Prefer WebSocket when available
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ type: 'send_message', username: currentUsername, content }));
+            // clear input immediately; server will broadcast the message back to us
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+            return;
         }
-
-        messageInput.value = '';
-        messageInput.style.height = 'auto';
-        await loadMessages();
+        alert('WebSocket not connected. Message not sent.');
     } catch (error) {
         alert('Failed to send message: ' + error.message);
     }
 }
 
-async function loadMessages() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/messages`);
-        
-        if (!response.ok) {
-            throw new Error('Failed to load messages');
-        }
 
-        const messages = await response.json();
-        displayMessages(messages);
-    } catch (error) {
-        console.error('Error loading messages:', error);
-        document.getElementById('messagesContainer').innerHTML = 
-            '<div class="error">Failed to load messages. Please refresh the page.</div>';
-    }
+function connectWebSocket() {
+    if (ws) return; // already connected or connecting
+
+    ws = new WebSocket(WS_URL);
+
+    ws.addEventListener('open', () => {
+        console.log('WebSocket connected');
+    });
+
+    ws.addEventListener('message', (ev) => {
+        try {
+            const data = JSON.parse(ev.data);
+            if (data.type === 'init_sync') {
+                displayMessages(data.messages || []);
+            } else if (data.type === 'new_message') {
+                appendMessage(data.message);
+            }
+        } catch (e) {
+            console.error('Invalid WS message', e);
+        }
+    });
+
+    ws.addEventListener('close', () => {
+        console.log('WebSocket closed');
+        ws = null;
+        // Optionally attempt reconnect after a delay
+        setTimeout(() => {
+            if (!ws && currentUsername) connectWebSocket();
+        }, 2000);
+    });
+
+    ws.addEventListener('error', (err) => {
+        console.error('WebSocket error', err);
+    });
+}
+
+
+function appendMessage(message) {
+    const container = document.getElementById('messagesContainer');
+
+    const placeholder = container && (container.querySelector('.no-messages') || container.querySelector('.loading'));
+    if (placeholder) container.innerHTML = '';
+
+    const isOwn = message.username === currentUsername;
+    const div = document.createElement('div');
+    div.className = `message ${isOwn ? 'own' : ''}`;
+    div.innerHTML = `
+        <div class="message-header">
+            <span class="username">${escapeHtml(message.username)}</span>
+            <span class="timestamp">${message.timestamp}</span>
+        </div>
+        <div class="message-content">${escapeHtml(message.content)}</div>
+    `;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
 }
 
 function displayMessages(messages) {
@@ -139,21 +151,13 @@ function displayMessages(messages) {
     container.scrollTop = container.scrollHeight;
 }
 
-function startMessagePolling() {
-    // Poll for new messages every 2 seconds
-    messageInterval = setInterval(loadMessages, 2000);
-}
-
-function stopMessagePolling() {
-    if (messageInterval) {
-        clearInterval(messageInterval);
-        messageInterval = null;
-    }
-}
-
 function logout() {
     currentUsername = '';
-    stopMessagePolling();
+    // Close websocket if open
+    if (ws) {
+        try { ws.close(); } catch (e) {}
+        ws = null;
+    }
     
     // Switch back to login view
     document.getElementById('chatSection').style.display = 'none';
@@ -171,16 +175,3 @@ function escapeHtml(text) {
     div.textContent = text;
     return div.innerHTML;
 }
-
-// Check if backend is available on page load
-window.addEventListener('load', async () => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/`);
-        if (!response.ok) {
-            throw new Error('Backend not accessible');
-        }
-    } catch (error) {
-        document.getElementById('loginError').textContent = 
-            'Cannot connect to server. Please make sure the backend is running on http://localhost:8000';
-    }
-});
