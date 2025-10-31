@@ -35,6 +35,12 @@ Im Ordner [/newsfeed](./newsfeed/) befindet sich eine einfache Newsfeed-Anwendun
     - schönere Teaser-Texte anzeigen -> Links folgen -> Achtung: nicht zu viele Anfragen an den Server senden
 - Filtern nach Schlüsselworten in den Neuigkeiten
 
+### Messenger
+
+Im Ordner [/messenger](./messenger/) befindet sich eine simple Messenger-Anwendung, die mit Websockets funktioniert.
+
+...TBD...
+
 ### weitere Ideen für Anwendungen
 
 - Einkaufsliste
