@@ -9,7 +9,7 @@ async def hello():
         print(initialMessages)
 
         while True:
-            message = input("Enter Message: ")
+            message = await asyncio.to_thread(input, "Enter Message: ")
             user = "console"
             jsonString = json.dumps({"user": user, "content": message})
             await websocket.send(jsonString)

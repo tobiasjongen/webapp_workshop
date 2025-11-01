@@ -20,9 +20,17 @@ async def handle(websocket):
         while True:
             rawMessage = await websocket.recv()
 
-            jsonMessage = json.loads(rawMessage)
-            user = jsonMessage["user"]
-            content = jsonMessage["content"]
+            try:
+                jsonMessage = json.loads(rawMessage)
+                if not isinstance(jsonMessage, dict):
+                    raise ValueError("Message is not a JSON object")
+                user = jsonMessage["user"]
+                content = jsonMessage["content"]
+            except (json.JSONDecodeError, KeyError, ValueError) as e:
+                error_msg = f"Malformed message from {websocket.remote_address}: {e}"
+                print(error_msg)
+                continue
+
             timestamp = int(time.time())
             message = {"user": user, "content": content, "timestamp": timestamp}
 
