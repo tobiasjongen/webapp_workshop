@@ -1,50 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Messenger</title>
+
+    <title>Chat</title>
+
     <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Simple Messenger</h1>
-            <div class="user-info" id="userInfo" style="display: none;">
-                Welcome, <span id="currentUsername"></span>!
-                <button class="logout-btn" onclick="logout()">Logout</button>
-            </div>
-        </div>
-
-        <!-- Login Section -->
-        <div class="login-section" id="loginSection">
-            <h2>Enter Your Name to Join</h2>
-            <div class="input-group">
-                <input type="text" id="usernameInput" placeholder="Enter your name..." maxlength="50">
-            </div>
-            <button class="btn" onclick="login()">Join Chat</button>
-            <div class="error" id="loginError"></div>
-        </div>
-
-        <!-- Chat Section -->
-        <div class="chat-section" id="chatSection">
-            <div class="messages-container" id="messagesContainer">
-                <div class="loading">Loading messages...</div>
-            </div>
-            <div class="message-input-section">
-                <div class="message-input-container">
-                    <textarea 
-                        id="messageInput" 
-                        class="message-input" 
-                        placeholder="Type your message..."
-                        rows="1"
-                        maxlength="500"></textarea>
-                    <button class="btn send-btn" onclick="sendMessage()">Send</button>
-                </div>
-            </div>
-        </div>
+    
+    <!-- Login Page -->
+    <div id="login-page">
+        <p>Bitte gib deinen Namen ein:</p>
+        <input type="text">
+        <button onclick="startChat()">Chat starten</button>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Chat Page -->
+    <div id="chat-page">
+        <div id="message-container">
+            <!-- We will add all messages here later on using JavaScript -->
+        </div>
+        <input type="text">
+        <button onclick="sendMessage()">Senden</button>
+    </div>
+
 </body>
 </html>
