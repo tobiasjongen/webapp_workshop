@@ -11,22 +11,27 @@ MESSAGES = []
 
 async def handle(websocket):
     print(f"client '{websocket.remote_address}' connected")
-    CLIENTS.add(websocket)
+    CLIENTS.add(websocket) # store client for later broadcasting
 
-    await websocket.send(json.dumps(MESSAGES))
+    
+    await websocket.send(json.dumps(MESSAGES)) # send complete message history to client
     print(f"sending message history to client '{websocket.remote_address}'")
 
     try:
+        # loop until client disconnects
         while True:
-            rawMessage = await websocket.recv()
+            rawMessage = await websocket.recv() # receive message
 
             try:
-                jsonMessage = json.loads(rawMessage)
+                # parse received message
+                # message must be JSON object containing keys "user" and "content"
+                jsonMessage = json.loads(rawMessage) 
                 if not isinstance(jsonMessage, dict):
                     raise ValueError("Message is not a JSON object")
                 user = jsonMessage["user"]
                 content = jsonMessage["content"]
             except (json.JSONDecodeError, KeyError, ValueError) as e:
+                # handle errors
                 error_msg = f"Malformed message from {websocket.remote_address}: {e}"
                 print(error_msg)
                 continue
@@ -35,16 +40,16 @@ async def handle(websocket):
             message = {"user": user, "content": content, "timestamp": timestamp}
 
             print(f"{datetime.fromtimestamp(timestamp)} - {user}: '{content}'")
-            MESSAGES.append(message)
+            MESSAGES.append(message) # add message to message history
 
-            broadcast(CLIENTS, json.dumps([message]))
+            broadcast(CLIENTS, json.dumps([message])) # broadcast new message to all clients
 
     except websockets.ConnectionClosedOK:
         print(f"Client {websocket.remote_address} disconnected normally.")
     except websockets.ConnectionClosedError as e:
         print(f"Client {websocket.remote_address} disconnected with error: {e}")
     finally:
-        CLIENTS.remove(websocket)
+        CLIENTS.remove(websocket) # remove disconnected client
 
 async def main():
     PORT = 8765
